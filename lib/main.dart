@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cskmemp/completed_tasks.dart';
 import 'package:cskmemp/others_pending_tasks.dart';
 import 'package:cskmemp/tasks_screen.dart';
@@ -101,13 +102,23 @@ Future<void> initializeNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings(
           '@mipmap/ic_launcher'); // Replace with your app icon name
+
+  final DarwinInitializationSettings initializationSettingsDarwin =
+      DarwinInitializationSettings(
+          requestSoundPermission: true,
+          requestBadgePermission: true,
+          requestAlertPermission: true,
+          onDidReceiveLocalNotification:
+              (int id, String? title, String? body, String? payload) async {});
+
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
+    iOS: initializationSettingsDarwin,
   );
 
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) async {});
 }
 
 //show notification
@@ -129,8 +140,10 @@ Future<void> showNotification(String title, String message) async {
     enableVibration: true,
     styleInformation: bigTextStyleInformation,
   );
-  NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
+  NotificationDetails platformChannelSpecifics = NotificationDetails(
+    android: androidPlatformChannelSpecifics,
+    iOS: DarwinNotificationDetails(),
+  );
 
   await flutterLocalNotificationsPlugin.show(
     0,
