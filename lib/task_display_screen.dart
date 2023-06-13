@@ -47,7 +47,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   @override
   void dispose() {
-    tasks.clear();
+    streamController.close();
     super.dispose();
   }
 
@@ -67,14 +67,16 @@ class _TaskListScreenState extends State<TaskListScreen> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       //print("data = $data");
-      setState(() {
-        tasks = List<Task>.from(data['tasks'].map((task) => Task(
-              taskId: task['taskId'],
-              date: task['date'],
-              description: task['description'],
-              assignedBy: task['assignedBy'],
-            )));
-      });
+      if (this.mounted) {
+        setState(() {
+          tasks = List<Task>.from(data['tasks'].map((task) => Task(
+                taskId: task['taskId'],
+                date: task['date'],
+                description: task['description'],
+                assignedBy: task['assignedBy'],
+              )));
+        });
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -150,7 +152,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
                               saveTaskCompletion(task);
                             },
                           )
-                    : null,
+                    : Checkbox(
+                        value: task.completed,
+                        onChanged: (val) {
+                          EasyLoading.showInfo(
+                              "Only ${task.assignedBy} can close this task.");
+                        },
+                      ),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

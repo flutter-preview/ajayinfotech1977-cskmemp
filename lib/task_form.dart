@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:cskmemp/app_config.dart';
 import 'package:cskmemp/task_display_screen.dart';
-import 'package:cskmemp/task_display_screen_others.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -51,7 +50,19 @@ class _TaskFormState extends State<TaskForm> {
     List<DropdownMenuItem<String>> menuItems = employees.map((employee) {
       return DropdownMenuItem<String>(
         value: employee['userno'].toString(),
-        child: Text(employee['ename']),
+        child: Container(
+          //width: double.infinity,
+          //height: 10,
+          margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+          decoration:
+              AppConfig.boxDecoration(), // Set the background color here
+          child: Text(
+            employee['ename'],
+            style: TextStyle(
+              color: Colors.white, // Set the text color here
+            ),
+          ),
+        ),
       );
     }).toList();
 
@@ -68,7 +79,7 @@ class _TaskFormState extends State<TaskForm> {
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
-      padding: const EdgeInsets.all(16.0),
+      //padding: const EdgeInsets.all(4.0),
       child: Column(
         children: [
           taskFormWidget(), //form to display whose code is in the same file.
@@ -89,25 +100,6 @@ class _TaskFormState extends State<TaskForm> {
             child: TaskListScreen(
               stream: streamController.stream,
               taskType: 'My',
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Text(
-            'Your Assigned Pending Tasks',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 236, 244, 250)),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            //Tasks assigned by the user to others
-            child: TaskListScreenOthers(
-              stream: streamController.stream,
-              taskType: 'Other',
             ),
           ),
         ],
@@ -138,7 +130,7 @@ class _TaskFormState extends State<TaskForm> {
               },
             ),
           ),
-          const SizedBox(width: 16.0),
+          const SizedBox(width: 8.0),
           Expanded(
             flex: 2,
             child: DropdownButtonFormField<String>(
@@ -163,7 +155,7 @@ class _TaskFormState extends State<TaskForm> {
               },
             ),
           ),
-          const SizedBox(width: 16.0),
+          const SizedBox(width: 8.0),
           IconButton(
             icon: _saving
                 ? Container(
@@ -192,6 +184,7 @@ class _TaskFormState extends State<TaskForm> {
   }
 
   void addTask() async {
+    FocusScope.of(context).unfocus();
     setState(() {
       _saving = true;
     });

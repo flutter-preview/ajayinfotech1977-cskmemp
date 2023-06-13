@@ -34,6 +34,13 @@ class AppConfig {
     );
   }
 
+  static TextStyle normalWhite15() {
+    return const TextStyle(
+      fontSize: 15,
+      color: Colors.white,
+    );
+  }
+
   static TextStyle normalWhite20() {
     return const TextStyle(
       fontSize: 20,
@@ -123,6 +130,15 @@ class AppConfig {
 
   static Future<void> logout() async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
+    var userNo = prefs.getInt('userNo').toString();
+    await http.post(
+      Uri.parse('https://www.cskm.com/schoolexpert/cskmemp/logout.php'),
+      body: {
+        'userNo': userNo,
+        'secretKey': secreetKey,
+      },
+    );
+
     await prefs.remove('userid');
     await prefs.remove('password1');
     await prefs.remove('userNo');
@@ -133,7 +149,7 @@ class AppConfig {
 
   static void configLoading() {
     EasyLoading easyLoading = EasyLoading();
-    easyLoading.loadingStyle = EasyLoadingStyle.light;
+    easyLoading.loadingStyle = EasyLoadingStyle.dark;
     //easyLoading.indicatorType = EasyLoadingIndicatorType.threeBounce;
     //easyLoading.maskType = EasyLoadingMaskType.black;
     //easyLoading.backgroundColor = Color.fromARGB(10, 83, 83, 83);

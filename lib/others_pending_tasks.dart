@@ -26,15 +26,10 @@ class OthersPendingTasksScreen extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Others Pending Tasks'),
-      ),
-      body: Container(
-        //height: double.infinity,
-        decoration: AppConfig.boxDecoration(),
-        child: const PendingTaskForm(),
-      ),
+    return Container(
+      //height: double.infinity,
+      decoration: AppConfig.boxDecoration(),
+      child: const PendingTaskForm(),
     );
   }
 }
@@ -76,7 +71,20 @@ class _PendingTaskFormState extends State<PendingTaskForm> {
     List<DropdownMenuItem<String>> menuItems = employees.map((employee) {
       return DropdownMenuItem<String>(
         value: employee['userno'].toString(),
-        child: Text(employee['ename']),
+        child: //Text(employee['ename']),
+            Container(
+          //width: double.infinity,
+          //height: 10,
+          margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+          decoration:
+              AppConfig.boxDecoration(), // Set the background color here
+          child: Text(
+            employee['ename'],
+            style: TextStyle(
+              color: Colors.white, // Set the text color here
+            ),
+          ),
+        ),
       );
     }).toList();
 

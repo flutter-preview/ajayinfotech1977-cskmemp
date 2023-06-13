@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> login() async {
+    FocusScope.of(context).unfocus();
     // Make a POST request to the server
     //print("Login function called");
     SharedPreferences prefs = await SharedPreferences.getInstance();

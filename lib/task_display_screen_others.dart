@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cskmemp/app_config.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 StreamController<bool> streamController = StreamController<bool>.broadcast();
 
@@ -51,6 +52,7 @@ class _TaskListScreenStateOthers extends State<TaskListScreenOthers> {
   }
 
   Future<void> fetchData() async {
+    EasyLoading.show(status: 'Loading...');
     var userNo = await AppConfig().getUserNo().then((String result) => result);
     var response = await http.post(
       Uri.parse('https://www.cskm.com/schoolexpert/cskmemp/fetchTasks.php'),
@@ -64,14 +66,16 @@ class _TaskListScreenStateOthers extends State<TaskListScreenOthers> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       //print("data = $data");
-      setState(() {
-        tasks = List<OthersTask>.from(data['tasks'].map((task) => OthersTask(
-              taskId: task['taskId'],
-              date: task['date'],
-              description: task['description'],
-              assignedTo: task['assignedBy'],
-            )));
-      });
+      if (this.mounted) {
+        setState(() {
+          tasks = List<OthersTask>.from(data['tasks'].map((task) => OthersTask(
+                taskId: task['taskId'],
+                date: task['date'],
+                description: task['description'],
+                assignedTo: task['assignedBy'],
+              )));
+        });
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -80,6 +84,7 @@ class _TaskListScreenStateOthers extends State<TaskListScreenOthers> {
       );
       //EasyLoading.showError('Error Fetching Tasks. Please Retry Later!');
     }
+    EasyLoading.dismiss();
   }
 
   Future<void> saveTaskCompletion(OthersTask task) async {

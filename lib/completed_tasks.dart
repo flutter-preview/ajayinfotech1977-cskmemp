@@ -59,14 +59,16 @@ class _CompletedTasksState extends State<CompletedTasks> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       //print("data = $data");
-      setState(() {
-        tasks = List<Task>.from(data['tasks'].map((task) => Task(
-              taskId: task['taskId'],
-              date: task['date'],
-              description: task['description'],
-              assignedBy: task['assignedBy'],
-            )));
-      });
+      if (this.mounted) {
+        setState(() {
+          tasks = List<Task>.from(data['tasks'].map((task) => Task(
+                taskId: task['taskId'],
+                date: task['date'],
+                description: task['description'],
+                assignedBy: task['assignedBy'],
+              )));
+        });
+      }
     } else {
       // ScaffoldMessenger.of(context).showSnackBar(
       //   const SnackBar(
@@ -80,51 +82,46 @@ class _CompletedTasksState extends State<CompletedTasks> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Completed Tasks'),
-      ),
-      body: Center(
-        child: Container(
-          decoration: AppConfig.boxDecoration(),
-          height: double.infinity,
-          padding: const EdgeInsets.all(16.0),
+    return Center(
+      child: Container(
+        decoration: AppConfig.boxDecoration(),
+        height: double.infinity,
+        padding: const EdgeInsets.all(4.0),
 
-          //Tasks assigned to user of the app
-          child: ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              final task = tasks[index];
-              return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 5.0,
-                child: ListTile(
-                  leading: null,
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(task.description),
-                      Text(
-                        'Assigned by: ${task.assignedBy}',
-                        style: const TextStyle(
-                          fontSize: 10,
-                        ),
+        //Tasks assigned to user of the app
+        child: ListView.builder(
+          itemCount: tasks.length,
+          itemBuilder: (context, index) {
+            final task = tasks[index];
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 5.0,
+              child: ListTile(
+                leading: null,
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(task.description),
+                    Text(
+                      'Assigned by: ${task.assignedBy}',
+                      style: const TextStyle(
+                        fontSize: 10,
                       ),
-                    ],
-                  ),
-                  trailing: SizedBox(
-                    width: 65,
-                    child: Text(
-                      task.date,
-                      style: const TextStyle(fontSize: 12),
                     ),
+                  ],
+                ),
+                trailing: SizedBox(
+                  width: 65,
+                  child: Text(
+                    task.date,
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

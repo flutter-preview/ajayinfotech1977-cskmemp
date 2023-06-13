@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 class HomeScreenButtons extends StatelessWidget {
   const HomeScreenButtons({super.key});
 
-  void openTasks(context) {
-    Navigator.pushNamed(context, '/tasks');
+  void openTasks(context) async {
+    var totalTabs = 3;
+    final bool otherAllowed = await AppConfig().isOthersPendingTasksAllowed();
+    //print("otherAllowed = $otherAllowed");
+    if (otherAllowed == true) totalTabs = 4;
+    //print("totalTabs = $totalTabs");
+    Navigator.pushNamed(context, '/tasktabbedscreen', arguments: totalTabs);
     //print("On Tap clicked from open Tasks");
   }
 
@@ -23,11 +28,11 @@ class HomeScreenButtons extends StatelessWidget {
           icon: Icons.task_alt,
           onTap: openTasks,
         ),
-        ButtonWidget(
-          buttonText: 'Messages',
-          icon: Icons.messenger,
-          onTap: openMessages,
-        ),
+        // ButtonWidget(
+        //   buttonText: 'Messages',
+        //   icon: Icons.messenger,
+        //   onTap: openMessages,
+        // ),
       ],
     );
   }
@@ -52,14 +57,32 @@ class ButtonWidget extends StatelessWidget {
         height: 40.0,
         child: DecoratedBox(
           decoration: AppConfig.boxDecoration(),
-          child: ElevatedButton.icon(
+          child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(0, 0, 0, 0)),
-            label: Text(
-              buttonText,
-              //style: AppConfig.normalWhite20(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 40,
+                  color: Colors.yellow,
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  buttonText,
+                  style: AppConfig.normaYellow20(),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            icon: Icon(icon),
+            // Text(
+            //   buttonText,
+            //   style: AppConfig.normalWhite15(),
+            // ),
+            //icon: Icon(icon, size: 40),
             onPressed: () => onTap(context),
           ),
         ),

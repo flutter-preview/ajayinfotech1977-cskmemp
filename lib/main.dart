@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cskmemp/completed_tasks.dart';
 import 'package:cskmemp/others_pending_tasks.dart';
+import 'package:cskmemp/task_tabbed_screen.dart';
 import 'package:cskmemp/tasks_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -139,6 +140,7 @@ Future<void> showNotification(String title, String message) async {
     showWhen: false,
     enableVibration: true,
     styleInformation: bigTextStyleInformation,
+    largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
   );
   NotificationDetails platformChannelSpecifics = NotificationDetails(
     android: androidPlatformChannelSpecifics,
@@ -253,6 +255,7 @@ class _MyAppState extends State<MyApp> {
         '/tasks': (context) => const TasksScreen(),
         '/completedtasks': (context) => const CompletedTasks(),
         '/othersPendingTasks': (context) => const OthersPendingTasksScreen(),
+        '/tasktabbedscreen': (context) => TaskTabbedScreen(),
       },
       builder: EasyLoading.init(),
     );
