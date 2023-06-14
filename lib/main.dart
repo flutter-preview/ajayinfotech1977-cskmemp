@@ -80,6 +80,17 @@ void initializeFirebase() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     String title = message.notification?.title as String;
     String msg = message.notification?.body as String;
+    /**********For Reading the data and using it uncomment below lines */
+    // var data = message.data;
+    // if (data.isNotEmpty) {
+    //   print(data);
+    //   if (data.containsKey('msgtype')) {
+    //     String dataValue = message.data['msgtype'];
+    //     // Process the data as needed
+    //     print('Received data from PHP: $dataValue');
+    //   }
+    // }
+
     showNotification(title, msg);
     // if (kDebugMode) {
     //   print('Handling a foreground message: ${message.messageId}');
