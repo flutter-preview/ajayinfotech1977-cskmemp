@@ -1,9 +1,9 @@
-import 'package:cskmemp/completed_tasks.dart';
-import 'package:cskmemp/others_pending_tasks.dart';
-import 'package:cskmemp/task_form.dart';
+import 'package:cskmemp/tasks/completed_tasks.dart';
+import 'package:cskmemp/tasks/others_pending_tasks.dart';
+import 'package:cskmemp/tasks/task_form.dart';
 import 'package:flutter/material.dart';
 import 'package:cskmemp/app_config.dart';
-import 'package:cskmemp/task_list_other.dart';
+import 'package:cskmemp/tasks/task_list_other.dart';
 
 class TaskTabbedScreen extends StatefulWidget {
   @override

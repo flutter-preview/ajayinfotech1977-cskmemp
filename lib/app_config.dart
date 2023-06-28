@@ -12,6 +12,14 @@ class AppConfig {
   file before fetching any kind of data.
   */
   static String secreetKey = "WhzWoMoZQO2pgmw6h6So0j0b";
+  static String globalUserNo = "";
+  static String globalEname = "";
+  static bool? globalOthersPendingTasks = false;
+  static bool? globalClassTeacher = false;
+  static bool? globalIsOffSupdt = false;
+  static bool? globalIsTptIncharge = false;
+  static bool? globalIsHostelIncharge = false;
+  static bool? globalIsAccountant = false;
 
   static BoxDecoration boxDecoration() {
     return const BoxDecoration(
@@ -86,12 +94,23 @@ class AppConfig {
         var userNo = data['userNo'];
         var ename = data['ename'];
         var othersPendingTasks = data['othersPendingTasks'];
+        var classTeacher = data['classTeacher'];
+        var isOffSupdt = data['isOffSupdt'];
+        var isTptIncharge = data['isTptIncharge'];
+        var isHostelIncharge = data['isHostelIncharge'];
+        var isAccountant = data['isAccountant'];
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setInt('userNo', userNo);
         prefs.setString('ename', ename);
         prefs.setBool('othersPendingTasks', othersPendingTasks);
+        prefs.setBool('classTeacher', classTeacher);
+        prefs.setBool('isOffSupdt', isOffSupdt);
+        prefs.setBool('isTptIncharge', isTptIncharge);
+        prefs.setBool('isHostelIncharge', isHostelIncharge);
+        prefs.setBool('isAccountant', isAccountant);
 
+        await AppConfig.setGlobalVariables();
         // Navigate to the home screen
         return Future.value(true);
       } else {
@@ -128,6 +147,17 @@ class AppConfig {
     }
   }
 
+  Future<bool> isClassTeacher() async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('classTeacher')) {
+      bool classTeacher = prefs.getBool('classTeacher') as bool;
+      //print("From getUserNo userNo= $userNo");
+      return Future.value(classTeacher);
+    } else {
+      return Future.value(false);
+    }
+  }
+
   static Future<void> logout() async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     var userNo = prefs.getInt('userNo').toString();
@@ -145,6 +175,7 @@ class AppConfig {
     await prefs.remove('ename');
     await prefs.remove('loggedInState');
     await prefs.remove('othersPendingTasks');
+    await prefs.remove('classTeacher');
   }
 
   static void configLoading() {
@@ -153,5 +184,33 @@ class AppConfig {
     //easyLoading.indicatorType = EasyLoadingIndicatorType.threeBounce;
     //easyLoading.maskType = EasyLoadingMaskType.black;
     //easyLoading.backgroundColor = Color.fromARGB(10, 83, 83, 83);
+  }
+
+  //make globally available variables for the app fetched from shared preferences
+  static Future<void> setGlobalVariables() async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('userNo')) {
+      var userNo = await prefs.getInt('userNo').toString();
+      var ename = await prefs.getString('ename');
+      var othersPendingTasks = await prefs.getBool('othersPendingTasks');
+      var classTeacher = await prefs.getBool('classTeacher');
+      var isOffSupdt = await prefs.getBool('isOffSupdt');
+      var isTptIncharge = await prefs.getBool('isTptIncharge');
+      var isHostelIncharge = await prefs.getBool('isHostelIncharge');
+      var isAccountant = await prefs.getBool('isAccountant');
+
+      globalUserNo = userNo;
+      globalEname = ename as String;
+      globalOthersPendingTasks = othersPendingTasks;
+      globalClassTeacher = classTeacher;
+      globalIsOffSupdt = isOffSupdt;
+      globalIsTptIncharge = isTptIncharge;
+      globalIsHostelIncharge = isHostelIncharge;
+      globalIsAccountant = isAccountant;
+    }
+    // print("globalUserNo= $globalUserNo");
+    // print("globalEname= $globalEname");
+    // print("globalOthersPendingTasks= $globalOthersPendingTasks");
+    // print("globalClassTeacher= $globalClassTeacher");
   }
 }

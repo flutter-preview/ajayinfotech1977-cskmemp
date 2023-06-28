@@ -58,6 +58,11 @@ class _LoginScreenState extends State<LoginScreen> {
         var userid = data['userid'];
         var password1 = data['password1'];
         var othersPendingTasks = data['othersPendingTasks'];
+        var classTeacher = data['classTeacher'];
+        var isOffSupdt = data['isOffSupdt'];
+        var isTptIncharge = data['isTptIncharge'];
+        var isHostelIncharge = data['isHostelIncharge'];
+        var isAccountant = data['isAccountant'];
 
         prefs.setInt('userNo', userNo);
         prefs.setString('ename', ename);
@@ -65,6 +70,13 @@ class _LoginScreenState extends State<LoginScreen> {
         prefs.setString('password1', password1);
         prefs.setBool('loggedInState', true);
         prefs.setBool('othersPendingTasks', othersPendingTasks);
+        prefs.setBool('classTeacher', classTeacher);
+        prefs.setBool('isOffSupdt', isOffSupdt);
+        prefs.setBool('isTptIncharge', isTptIncharge);
+        prefs.setBool('isHostelIncharge', isHostelIncharge);
+        prefs.setBool('isAccountant', isAccountant);
+
+        await AppConfig.setGlobalVariables();
 
         // Navigate to the home screen
         Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);

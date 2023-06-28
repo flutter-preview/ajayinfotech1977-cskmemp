@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:cskmemp/completed_tasks.dart';
-import 'package:cskmemp/others_pending_tasks.dart';
-import 'package:cskmemp/task_tabbed_screen.dart';
-import 'package:cskmemp/tasks_screen.dart';
+import 'package:cskmemp/tasks/completed_tasks.dart';
+import 'package:cskmemp/tasks/others_pending_tasks.dart';
+import 'package:cskmemp/tasks/task_tabbed_screen.dart';
+import 'package:cskmemp/tasks/tasks_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,9 +14,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cskmemp/firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // TODO: Add stream controller
 import 'package:rxdart/rxdart.dart';
+
+import 'messaging/chat_screen.dart';
+import 'messaging/message_tabbed_screen.dart';
 
 // used to pass messages from event handler to the UI
 final _messageStreamController = BehaviorSubject<RemoteMessage>();
@@ -43,6 +47,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() {
   initializeFirebase();
+  AppConfig.setGlobalVariables();
   runApp(MyApp());
 }
 
@@ -211,9 +216,10 @@ class _MyAppState extends State<MyApp> {
 
   Future<bool> checkLoginState() async {
     //Call checkForUpdate() to check and return if an update is available uncomment below line to activate this feature
-    checkForUpdate();
+    //checkForUpdate();
     //if an update is available, immediately update it. uncomment below code
     if (_updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
+      //EasyLoading.dismiss();
       InAppUpdate.performImmediateUpdate()
           .catchError((e) => showSnack(e.toString()));
     }
@@ -247,15 +253,16 @@ class _MyAppState extends State<MyApp> {
         initialData: checkLoginState,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            AppConfig.configLoading();
-            EasyLoading.show(status: 'loading...');
+            //custom config easyloading
+            //AppConfig.configLoading();
+            //EasyLoading.show(status: "Loading...");
             return const SpalshScreen();
           }
           if (snapshot.data == true) {
-            EasyLoading.dismiss();
+            //EasyLoading.dismiss();
             return const HomeScreen();
           } else {
-            EasyLoading.dismiss();
+            //EasyLoading.dismiss();
             return const LoginScreen();
           }
         },
@@ -267,14 +274,26 @@ class _MyAppState extends State<MyApp> {
         '/completedtasks': (context) => const CompletedTasks(),
         '/othersPendingTasks': (context) => const OthersPendingTasksScreen(),
         '/tasktabbedscreen': (context) => TaskTabbedScreen(),
+        '/chatscreen': (context) => StudentListScreen(),
+        '/messagetabbedscreen': (context) => MessageTabbedScreen(),
       },
       builder: EasyLoading.init(),
     );
   }
 }
 
-class SpalshScreen extends StatelessWidget {
+class SpalshScreen extends StatefulWidget {
   const SpalshScreen({super.key});
+
+  @override
+  State<SpalshScreen> createState() => _SpalshScreenState();
+}
+
+class _SpalshScreenState extends State<SpalshScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(context) {
@@ -284,6 +303,7 @@ class SpalshScreen extends StatelessWidget {
 
 class SplashScreenWidget extends StatelessWidget {
   const SplashScreenWidget({super.key});
+
   @override
   Widget build(context) {
     return Scaffold(
@@ -315,6 +335,12 @@ class SplashScreenWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SpinKitFadingCircle(
+                color: const Color.fromARGB(255, 250, 251, 253),
+                size: 50.0,
+              ),
+              SizedBox(height: 16.0),
+              Text('Loading...'),
             ],
           ),
         ),

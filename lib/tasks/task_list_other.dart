@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:cskmemp/task_display_screen_others.dart';
+import 'package:cskmemp/tasks/task_display_screen_others.dart';
 import 'package:flutter/material.dart';
 
 StreamController<bool> streamController = StreamController<bool>.broadcast();

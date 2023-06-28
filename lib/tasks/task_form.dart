@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cskmemp/app_config.dart';
-import 'package:cskmemp/task_display_screen.dart';
+import 'package:cskmemp/tasks/task_display_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;

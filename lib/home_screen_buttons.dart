@@ -1,21 +1,30 @@
 import 'package:cskmemp/app_config.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreenButtons extends StatelessWidget {
+class HomeScreenButtons extends StatefulWidget {
   const HomeScreenButtons({super.key});
 
+  @override
+  State<HomeScreenButtons> createState() => _HomeScreenButtonsState();
+}
+
+class _HomeScreenButtonsState extends State<HomeScreenButtons> {
+  bool classTeacher = false;
+  //code to store classTeacher in SharedPreferences to the global variable classTeacher
+
+  //code to fetch classTeacher from SharedPreferences
   void openTasks(context) async {
     var totalTabs = 3;
-    final bool otherAllowed = await AppConfig().isOthersPendingTasksAllowed();
+    //final bool otherAllowed = await AppConfig().isOthersPendingTasksAllowed();
     //print("otherAllowed = $otherAllowed");
-    if (otherAllowed == true) totalTabs = 4;
+    if (AppConfig.globalOthersPendingTasks == true) totalTabs = 4;
     //print("totalTabs = $totalTabs");
     Navigator.pushNamed(context, '/tasktabbedscreen', arguments: totalTabs);
     //print("On Tap clicked from open Tasks");
   }
 
   void openMessages(context) {
-    //print("On Tap clicked from messages");
+    Navigator.pushNamed(context, '/messagetabbedscreen');
   }
 
   @override
@@ -28,11 +37,18 @@ class HomeScreenButtons extends StatelessWidget {
           icon: Icons.task_alt,
           onTap: openTasks,
         ),
-        // ButtonWidget(
-        //   buttonText: 'Messages',
-        //   icon: Icons.messenger,
-        //   onTap: openMessages,
-        // ),
+        if (AppConfig.globalClassTeacher == true)
+          ButtonWidget(
+            buttonText: 'Class Teacher Smart Messaging',
+            icon: Icons.messenger,
+            onTap: openMessages,
+          ),
+        if (AppConfig.globalIsOffSupdt == true)
+          ButtonWidget(
+            buttonText: 'Office Smart Messaging',
+            icon: Icons.supervisor_account,
+            onTap: openMessages,
+          ),
       ],
     );
   }
