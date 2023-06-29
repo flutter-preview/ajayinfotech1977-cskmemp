@@ -1,4 +1,9 @@
 workflows:
+  ios-workflow:
+    name: iOS Workflow
+    max_build_duration: 120
+    integrations:
+      app_store_connect: cskmapps
   # ios-method-1:
   #   name: ios signing methos-1 workflows
   #   environment:
@@ -20,8 +25,8 @@ workflows:
   #     email:
   #       recipients:
   #         - sssoft2023@gmail.com
-  ios-method-2:
-    name: ios signing methos-2 workflow
+  # ios-method-2:
+  #   name: ios signing methos-2 workflow
     environment:
       ios_signing:
         provisioning_profiles:
