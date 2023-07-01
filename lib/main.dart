@@ -79,7 +79,7 @@ void initializeFirebase() async {
   String? token = await messaging.getToken() as String;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString('deviceToken', token);
-  //print('Registration Token=$token');
+  print('Registration Token=$token');
 
   // TODO: Set up foreground message handler
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
